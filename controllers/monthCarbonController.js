@@ -4,6 +4,10 @@
 
     // Utility to calculate CO2 emissions for vehicles
     const calculateVehicleCO2Emissions = (vehicle) => {
+        if (!vehicle.fuelType) {
+            throw new Error('Fuel type is missing in vehicle data');
+        }
+    
         let emissionFactor = 0;
         switch (vehicle.fuelType.toLowerCase()) {
             case 'petrol':
@@ -21,14 +25,21 @@
             default:
                 throw new Error('Unknown fuel type');
         }
-
+    
+        if (!vehicle.kilometersTraveled || !vehicle.averageFuelEfficiency) {
+            throw new Error('Missing kilometers traveled or fuel efficiency for the vehicle');
+        }
+    
         return (vehicle.kilometersTraveled / vehicle.averageFuelEfficiency) * emissionFactor;
     };
-
+    
     const calculateFlightCO2Emissions = (flights) => {
         return flights.map(flight => {
-            let emissionFactor = 0;
+            if (!flight.class || !flight.hours) {
+                throw new Error('Flight data is incomplete');
+            }
     
+            let emissionFactor = 0;
             switch (flight.class.toLowerCase()) {
                 case 'economy':
                     emissionFactor = 75.05; // kg CO2 per hour
@@ -47,6 +58,7 @@
             return { ...flight, totalCO2EmissionsOfFlight: totalCO2EmissionsOfFlight.toFixed(2) };
         });
     };
+    
     
 // Utility to convert dd/mm/yyyy to Date object
 const parseDate = (dateString) => {
