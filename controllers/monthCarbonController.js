@@ -35,11 +35,8 @@
     
     const calculateFlightCO2Emissions = (flights) => {
         return flights.map(flight => {
-            if (!flight.class || !flight.hours) {
-                throw new Error('Flight data is incomplete');
-            }
-    
             let emissionFactor = 0;
+    
             switch (flight.class.toLowerCase()) {
                 case 'economy':
                     emissionFactor = 75.05; // kg CO2 per hour
@@ -58,7 +55,6 @@
             return { ...flight, totalCO2EmissionsOfFlight: totalCO2EmissionsOfFlight.toFixed(2) };
         });
     };
-    
     
 // Utility to convert dd/mm/yyyy to Date object
 const parseDate = (dateString) => {
