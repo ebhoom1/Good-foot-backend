@@ -5,56 +5,65 @@
     // Utility to calculate CO2 emissions for vehicles
     const calculateVehicleCO2Emissions = (vehicle) => {
         if (!vehicle.fuelType) {
-            throw new Error('Fuel type is missing in vehicle data');
+          throw new Error('Fuel type is missing in vehicle data');
         }
-    
+      
+        const fuelType = vehicle.fuelType.toLowerCase(); // Safely convert to lowercase
         let emissionFactor = 0;
-        switch (vehicle.fuelType.toLowerCase()) {
-            case 'petrol':
-                emissionFactor = 2.31;
-                break;
-            case 'diesel':
-                emissionFactor = 2.68;
-                break;
-            case 'cng':
-                emissionFactor = 1.86;
-                break;
-            case 'electric':
-                emissionFactor = 0;
-                break;
-            default:
-                throw new Error('Unknown fuel type');
+      
+        switch (fuelType) {
+          case 'petrol':
+            emissionFactor = 2.31;
+            break;
+          case 'diesel':
+            emissionFactor = 2.68;
+            break;
+          case 'cng':
+            emissionFactor = 1.86;
+            break;
+          case 'electric':
+            emissionFactor = 0;
+            break;
+          default:
+            throw new Error(`Unknown fuel type: ${fuelType}`);
         }
-    
+      
         if (!vehicle.kilometersTraveled || !vehicle.averageFuelEfficiency) {
-            throw new Error('Missing kilometers traveled or fuel efficiency for the vehicle');
+          throw new Error('Missing kilometers traveled or fuel efficiency for the vehicle');
         }
-    
+      
         return (vehicle.kilometersTraveled / vehicle.averageFuelEfficiency) * emissionFactor;
-    };
+      };
+      
     
-    const calculateFlightCO2Emissions = (flights) => {
+      const calculateFlightCO2Emissions = (flights) => {
         return flights.map(flight => {
-            let emissionFactor = 0;
-    
-            switch (flight.class.toLowerCase()) {
-                case 'economy':
-                    emissionFactor = 75.05; // kg CO2 per hour
-                    break;
-                case 'business':
-                    emissionFactor = 187.63; // kg CO2 per hour
-                    break;
-                case 'first':
-                    emissionFactor = 225.15; // kg CO2 per hour
-                    break;
-                default:
-                    throw new Error('Unknown flight class');
-            }
-    
-            const totalCO2EmissionsOfFlight = flight.hours * emissionFactor;
-            return { ...flight, totalCO2EmissionsOfFlight: totalCO2EmissionsOfFlight.toFixed(2) };
+          if (!flight.flightClass || !flight.hours) {
+            throw new Error('Flight data is incomplete');
+          }
+      
+          const flightClass = flight.flightClass.toLowerCase(); // Safely convert to lowercase
+          let emissionFactor = 0;
+      
+          switch (flightClass) {
+            case 'economy':
+              emissionFactor = 75.05; // kg CO2 per hour
+              break;
+            case 'business':
+              emissionFactor = 187.63; // kg CO2 per hour
+              break;
+            case 'first':
+              emissionFactor = 225.15; // kg CO2 per hour
+              break;
+            default:
+              throw new Error(`Unknown flight class: ${flightClass}`);
+          }
+      
+          const totalCO2EmissionsOfFlight = flight.hours * emissionFactor;
+          return { ...flight, totalCO2EmissionsOfFlight: totalCO2EmissionsOfFlight.toFixed(2) };
         });
-    };
+      };
+      
     
 // Utility to convert dd/mm/yyyy to Date object
 const parseDate = (dateString) => {
