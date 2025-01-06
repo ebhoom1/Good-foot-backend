@@ -13,4 +13,8 @@ router.get('/completions/user/:userId', challengeCompletionController.getChallen
 
 router.get('/completions/user/:userId/challenge/:challengeId', challengeCompletionController.getChallengeCompletionsByUserAndChallenge);
 
+router.get('/status/:userId/:challengeId', challengeCompletionController.getTaskStatus);
+
+router.get('/statusOfUser/:userId', challengeCompletionController.getChallengeStatsByUser );
+
 module.exports = router;
